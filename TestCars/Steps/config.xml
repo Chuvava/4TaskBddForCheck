@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <browser>Chrome</browser>           <!-- Set 'Chrome' or 'Firefox' -->
+  <url>https://www.cars.com</url>
+  <implicitWait>25</implicitWait>
+</config>
