@@ -66,7 +66,6 @@
   <ItemGroup>
     <Compile Include="Objects\Car.cs" />
     <Compile Include="Objects\CarsCatalog.cs" />
-    <Compile Include="Pages\BaseForm.cs" />
     <Compile Include="Pages\ComparePage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\Menu.cs" />

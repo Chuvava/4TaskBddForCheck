@@ -2,6 +2,7 @@
 using Framework.Elements;
 using OpenQA.Selenium;
 
+
 namespace CarsPages.Pages
 {
     public class Menu : BaseForm

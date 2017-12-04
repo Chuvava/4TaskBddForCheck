@@ -1,6 +1,5 @@
-﻿using System;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
+﻿using OpenQA.Selenium;
+
 
 namespace Framework.Elements
 {
@@ -9,12 +8,6 @@ namespace Framework.Elements
         public Button(By locator)
             : base(locator)
         {            
-        }
-
-        public void WaitElementExist()
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.GetTimeWait()));
-            element = wait.Until(ExpectedConditions.ElementExists(locator));
         }
     }
 }

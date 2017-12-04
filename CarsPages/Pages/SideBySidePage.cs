@@ -1,11 +1,16 @@
 ﻿using System;
+using CarsPages.Objects;
 using Framework.Elements;
 using OpenQA.Selenium;
+
 
 namespace CarsPages.Pages
 {
     public class SideBySidePage : BaseForm
     {
+        private string make = "make";
+        private string model = "model";
+        private string year = "year";
         private readonly Label btnAddCar = new Label(By.Id("icon-div"));
         private string locPatternCmb = "{0}-dropdown";
         private string doneXpath = "//button[contains(text(), 'Done')]";
@@ -19,7 +24,7 @@ namespace CarsPages.Pages
         private Label engineSecond;
         private Label transmissionSecond;
 
-        public void AddAnotherCarForCompare(string brandText, string modelText, string yearText)
+        public void AddAnotherCarForCompare(string numberCar)
         {
             btnAddCar.Click();
             ComboBox cmbBrand = new ComboBox(By.Id(String.Format(locPatternCmb, make)));
@@ -27,9 +32,9 @@ namespace CarsPages.Pages
             ComboBox cmbYear = new ComboBox(By.Id(String.Format(locPatternCmb, year)));
             Button btnDone = new Button(By.XPath(doneXpath));
 
-            cmbBrand.SelectOptionByText(brandText);
-            cmbModel.SelectOptionByText(modelText);
-            cmbYear.SelectOptionByText(yearText);
+            cmbBrand.SelectOptionByText(CarsCatalog.GetBrand(numberCar));
+            cmbModel.SelectOptionByText(CarsCatalog.GetModel(numberCar));
+            cmbYear.SelectOptionByText(CarsCatalog.GetYear(numberCar));
             btnDone.Click();
         }
 

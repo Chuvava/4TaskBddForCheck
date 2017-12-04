@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace Framework.Elements
 {
     public class ComboBox : BaseElement
@@ -18,16 +19,23 @@ namespace Framework.Elements
             cmbBox = new SelectElement(select);
         }
 
+        public void SelectRandomOption()
+        {
+            int max = GetQuantityOfOptions();
+            int indexOfRandomOptions = rand.Next(1, max);
+            WaitElement();
+            cmbBox.SelectByIndex(indexOfRandomOptions);
+        }
+
+        public new string GetText()
+        {
+            return cmbBox.SelectedOption.Text;
+        }
+
         public new void WaitElement()
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.GetTimeWait()));
             select = wait.Until(ExpectedConditions.ElementExists(locator));
-        }
-
-        public void SelectOptionByIndex(int index)
-        {
-            WaitElement();
-            cmbBox.SelectByIndex(index);
         }
 
         public void SelectOptionByText(string text)
@@ -40,28 +48,6 @@ namespace Framework.Elements
         {
             int quantityOfOptions = cmbBox.Options.Count;
             return quantityOfOptions;
-        }
-
-        public int GetRandomOptionIndex()
-        {
-            int quantityOfOptions = GetQuantityOfOptions();
-            int indexOfRandomOptions = rand.Next(1, quantityOfOptions);
-            return indexOfRandomOptions;
-        }
-
-        public string GetRandomOptionText()
-        {
-            int index = GetRandomOptionIndex();
-            string randomOptionString = cmbBox.Options[index].Text;
-            return randomOptionString;
-        }
-
-        public void SelectRandomOptionByIndex()
-        {
-            int quantity = GetQuantityOfOptions();
-            int indexOfRandomOption = GetRandomOptionIndex();
-            WaitElement();
-            cmbBox.SelectByIndex(indexOfRandomOption);
         }
 
     }

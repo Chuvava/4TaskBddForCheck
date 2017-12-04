@@ -1,12 +1,15 @@
 ﻿using System;
 using Framework.Elements;
-using NUnit.Framework;
 using OpenQA.Selenium;
+
 
 namespace CarsPages.Pages
 {
     public class ResearchPage : BaseForm
     {
+        private string make = "make";
+        private string model = "model";
+        private string year = "year";
         private string locPattern = "//div[contains(@class, 'hsw-{0}s')]//select";
         private readonly Button btnSearch = new Button(By.XPath("//div[contains(@class, 'submit')]"));
         private readonly Label lblResearchForm = new Label(By.XPath("//section[@id='research-search-widget']"));
@@ -17,35 +20,21 @@ namespace CarsPages.Pages
 
         public ResearchPage()
         {
-            Assert.IsTrue(lblResearchForm.IfExist(), "Research Page is opened");
+            IsRightPage(lblResearchForm);
         }
 
-        private void SelectRandomBrand()
-        {         
-            ComboBox cmbBrand = new ComboBox(By.XPath(String.Format(locPattern, make)));
-            brandText = cmbBrand.GetRandomOptionText();
-            cmbBrand.SelectOptionByText(brandText);
-        }
-
-        private void SelectRandomModel()
+        private string SelectRandom(string type)
         {
-            ComboBox cmbModel = new ComboBox(By.XPath(String.Format(locPattern, model)));
-            modelText = cmbModel.GetRandomOptionText();
-            cmbModel.SelectOptionByText(modelText);
-        }
-
-        private void SelectRandomYear()
-        {
-            ComboBox cmbYear = new ComboBox(By.XPath(String.Format(locPattern, year)));
-            yearText = cmbYear.GetRandomOptionText();
-            cmbYear.SelectOptionByText(yearText);
+            ComboBox cmbType = new ComboBox(By.XPath(String.Format(locPattern, type)));
+            cmbType.SelectRandomOption();
+            return cmbType.GetText();
         }
 
         public void SelectRandomCar()
         {
-            SelectRandomBrand();
-            SelectRandomModel();
-            SelectRandomYear();
+            brandText = SelectRandom(make);
+            modelText = SelectRandom(model);
+            yearText = SelectRandom(year);
         }
 
         public void SubmitSearchOfSelectedCar()

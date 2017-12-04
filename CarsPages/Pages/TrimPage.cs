@@ -1,18 +1,22 @@
-﻿using Framework.Elements;
-using NUnit.Framework;
+﻿using CarsPages.Objects;
+using Framework.Elements;
 using OpenQA.Selenium;
+
 
 namespace CarsPages.Pages
 {
     public class TrimPage : BaseForm
     {
-        private Label lblFieldEngine = new Label(By.XPath("//div[contains(@class, 'cell cell-bg grow-2')]"));
-        private Label lblFieldTransmission = new Label(By.XPath("//div[contains(@class, 'cell grow-2')]"));
-        private Label lblH1 = new Label(By.XPath("//h1"));
+        private readonly Label lblFieldEngine = new Label(By.XPath("//div[contains(@class, 'cell cell-bg grow')]"));
+        private readonly Label lblFieldTransmission = new Label(By.XPath("//div[contains(@class, 'cell grow')]"));
+        private readonly Label lblH1 = new Label(By.XPath("//h1"));
+        private string extraLine = " Configurations";
 
-        public TrimPage(string model, string year)
+        public TrimPage(string numberCar)
         {
-            Assert.IsTrue(lblH1.GetText().Contains(model) && lblH1.GetText().Contains(year), "Trim Page of right car is opened");
+            string choosenCar = string.Format("{0} {1} {2}", CarsCatalog.GetYear(numberCar), CarsCatalog.GetBrand(numberCar),
+                CarsCatalog.GetModel(numberCar));
+            AreEqualStrings(choosenCar, lblH1, extraLine);
         }
 
         public string GetEngine()
@@ -24,6 +28,5 @@ namespace CarsPages.Pages
         {
             return lblFieldTransmission.GetText();
         }
-
     }
 }

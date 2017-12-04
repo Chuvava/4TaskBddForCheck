@@ -3,16 +3,17 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace Framework.Elements
 {
-    public class BaseElement
+    public abstract class BaseElement
     {
         protected IWebDriver driver = Browser.Browser.GetInstance().GetBrowser();
         protected IWebElement element;
         protected By locator;
         protected WebDriverWait wait;
 
-        public BaseElement(By locator)
+        protected BaseElement(By locator)
         {
             this.locator = locator;
         }

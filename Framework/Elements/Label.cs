@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace Framework.Elements
 {
     public class Label: BaseElement
@@ -75,6 +76,5 @@ namespace Framework.Elements
                 return text;
             }
         }
-
     }
 }

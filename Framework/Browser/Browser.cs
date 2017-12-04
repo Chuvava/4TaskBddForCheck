@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 
+
 namespace Framework.Browser
 {
     public class Browser

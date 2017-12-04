@@ -16,7 +16,6 @@ namespace TestCars.Steps
         private ComparePage comparePage;
         private SideBySidePage sideBySidePage;
         private MainPage mainPage;
-        private readonly CarsCatalog Catalog = new CarsCatalog();
 
         [BeforeScenario]
         public void TesInitialize()
@@ -44,7 +43,7 @@ namespace TestCars.Steps
             researchPage.SelectRandomCar();
             string[] newRandomCar = researchPage.GetRandomCarChoice();
             Car newCar = new Car(newRandomCar[0], newRandomCar[1], newRandomCar[2]);
-            Catalog.AddCar(numberCar, newCar);
+            CarsCatalog.AddCar(numberCar, newCar);
         }
 
         [When(@"Click button Search")]
@@ -56,34 +55,27 @@ namespace TestCars.Steps
         [When(@"Click on (.*) link of (.*) Page")]
         public void WhenClickOnTrimComparisonLinkOfCarPage(string partialText, string numberCar)
         {
-            modelOfCarPage = new ModelOfCarPage(partialText, Catalog.GetModel(numberCar), Catalog.GetYear(numberCar));
-            for (int i = 0; i <= 5; i++)
+            modelOfCarPage = new ModelOfCarPage(partialText);
+            try
             {
-                if (modelOfCarPage.IsTrimComparisonLinkAvailable())
-                {
-                    modelOfCarPage.NavigateToTrimComparison();
-                    break;
-                }
-                if (i == 5)
-                {
-                    Assert.Fail("The car with available trim comparison link wasn't found." +
-                                "Five attempts are finished.");
-                }
-                Catalog.DeleteCar(numberCar);
+                modelOfCarPage.NavigateToTrimComparison();
+            }
+            catch
+            {
+                CarsCatalog.DeleteCar(numberCar);
                 modelOfCarPage.NavigateItemMenu(MenuEnum.Research);
                 WhenSelectTheCarByRandomValues(numberCar);
                 WhenClickButtonSearch();
                 WhenClickOnTrimComparisonLinkOfCarPage(partialText, numberCar);
-                break;
             }
         }
 
         [When(@"Save (.*) characteristics\(Engine and Transmission\) from base complectation")]
         public void WhenSaveCharacteristicsEngineAndTransmissionFromBaseComplectation(string numberCar)
         {
-            trimPage = new TrimPage(Catalog.GetModel(numberCar), Catalog.GetModel(numberCar));
-            Catalog.SetEngine(numberCar, trimPage.GetEngine());
-            Catalog.SetTransmission(numberCar, trimPage.GetTransmission());
+            trimPage = new TrimPage(numberCar); //**
+            CarsCatalog.SetEngine(numberCar, trimPage.GetEngine());
+            CarsCatalog.SetTransmission(numberCar, trimPage.GetTransmission());
         }
 
         [When(@"Navigate To Compare Page")]
@@ -96,16 +88,14 @@ namespace TestCars.Steps
         [When(@"Select the (.*) Car for comparing")]
         public void WhenSelectTheCarForComparing(string numberCar)
         {
-            comparePage.SelectCarForComparing(Catalog.GetBrand(numberCar), Catalog.GetModel(numberCar), 
-                Catalog.GetYear(numberCar));
+            comparePage.SelectCarForComparing(numberCar);
         }
 
         [When(@"Select another (.*) Car for comparing")]
         public void WhenSelectAnotherCarForComparing(string numberCar)
         {
             sideBySidePage = new SideBySidePage();
-            sideBySidePage.AddAnotherCarForCompare(Catalog.GetBrand(numberCar), Catalog.GetModel(numberCar),
-                Catalog.GetYear(numberCar));            
+            sideBySidePage.AddAnotherCarForCompare(numberCar);            
         }
 
         [When(@"Copy car's characteristics \((.*), (.*)\) for first Car: (.*) and second Car: (.*)")]
@@ -118,10 +108,21 @@ namespace TestCars.Steps
         [Then(@"Assert the characteristics with data from trim pages for (.*) and (.*)")]
         public void ThenAssertTheCharacteristicsWithDataFromTrimPages(string numberCar, string numberCar2)
         {
-            Assert.IsTrue(sideBySidePage.EngineFirst.Contains(Catalog.GetEngine(numberCar)), "Engines are equal");
-            Assert.IsTrue(sideBySidePage.TransmissionFirst.Contains(Catalog.GetTransmission(numberCar)), "Transmissions are equal");
-            Assert.IsTrue(sideBySidePage.EngineSecond.Contains(Catalog.GetEngine(numberCar2)), "Engines of second car are equal");
-            Assert.IsTrue(sideBySidePage.TransmissionSecond.Contains(Catalog.GetTransmission(numberCar2)), "Transmissions of second car are equal");
+            string firstEngineActual = sideBySidePage.EngineFirst;
+            string firstEngineExpected = CarsCatalog.GetEngine(numberCar);
+            Assert.IsTrue(firstEngineActual.Contains(firstEngineExpected), "Engines are equal");
+
+            string firstTransmissionActual = sideBySidePage.TransmissionFirst;
+            string firstTransmissionExpected = CarsCatalog.GetTransmission(numberCar);
+            Assert.IsTrue(firstTransmissionActual.Contains(firstTransmissionExpected), "Transmissions are equal");
+
+            string secondEngineActual = sideBySidePage.EngineSecond;
+            string secondEngineExpected = CarsCatalog.GetEngine(numberCar2);
+            Assert.IsTrue(secondEngineActual.Contains(secondEngineExpected), "Engines of second car are equal");
+
+            string secondTransmissionActual = sideBySidePage.TransmissionSecond;
+            string secondTransmissionExpected = sideBySidePage.TransmissionSecond;
+            Assert.IsTrue(secondTransmissionActual.Contains(secondTransmissionExpected), "Transmissions of second car are equal");
         }
 
         [AfterScenario]
